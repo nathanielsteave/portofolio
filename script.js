@@ -150,6 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectCards.forEach(card => {
                     const cardCategory = card.dataset.category;
 
+                    // Logika ini akan otomatis menangani "basic", "web", "data", dll.
                     if (filterValue === 'all' || filterValue === cardCategory) {
                         card.classList.remove('hidden');
                     } else {

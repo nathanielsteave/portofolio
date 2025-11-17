@@ -233,7 +233,9 @@ section { padding: 100px 0; }
     opacity: 0;
     /* Gunakan max-height 0 untuk 'menghilangkan' kartu dari grid */
     max-height: 0;
-    padding: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-top: 0;
     margin-bottom: 0;
     overflow: hidden;
     /* Kita perlu juga menyembunyikan border/gap */
