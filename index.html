@@ -83,7 +83,11 @@
             <li><a href="#contact" class="nav-dot" data-section="contact" aria-label="Contact"></a></li>
         </ul>
     </nav>
-
+    
+    <div class="scroll-progress">
+        <div class="scroll-progress-bar"></div>
+    </div>
+    
     <main class="main-container">
 
         <section id="home" class="fullscreen-section">
@@ -96,7 +100,7 @@
                 <p class="hero-description reveal" data-delay="300">
                     I'm a Informatics student with a strong
                     foundation in web development and database management.
-                    Currently, I’m expanding my expertise in data science to
+                    Currently, I'm expanding my expertise in data science to
                     solve real-world challenges through data-driven insights
                     and innovative digital solutions.
                 </p>
@@ -248,6 +252,7 @@
                     <button class="filter-btn" data-filter="data">Data
                         Science</button>
                     <button class="filter-btn" data-filter="ai">AI</button>
+                    <button class="filter-btn" data-filter="cv">Computer Vision</button>
                 </div>
                 <div class="project-grid">
                     <!-- Semua proyek dari file asli dipertahankan -->
@@ -432,42 +437,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="project-card reveal" data-delay="700" data-category="ai">
-                        <img src="assets/ai-chatbot.png" alt="AI Chatbot" class="zoomable-image"
-                            data-filename="Chatbot Nexus AI">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/ai-chatbot" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://nexus-ai-eosin.vercel.app/" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">Chatbot Nexus AI</h3>
-                            <p class="project-desc">Developed a responsive
-                                conversational AI interface leveraging the
-                                Gemini 2.5 Flash model for natural language
-                                processing. The system integrates a React
-                                frontend with a Python Flask backend to
-                                deliver real-time, context-aware user
-                                interactions.</p>
-                            <ul class="project-tech">
-                                <li>React</li>
-                                <li>Tailwind
-                                    CSS</li>
-                                <li>Lucide
-                                    React</li>
-                                <li>Python</li>
-                                <li>Flash</li>
-                                <li>RESTful
-                                    API</li>
-                            </ul>
-                        </div>
-                    </div> -->
-
                     <div class="project-card reveal" data-category="ai">
                         <img src="assets/ai-code-reviewer (4).png" alt="AI Code Reviewer" class="zoomable-image"
                             data-filename="AI Code Reviewer"
@@ -518,6 +487,31 @@
                                 <li>Streamlit</li>
                                 <li>Groq AI</li>
                                 <li>Plotly</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="project-card reveal" data-category="cv">
+                        <img src="assets/face-puzzle-game(1).png" alt="Face Puzzle Game" class="zoomable-image"
+                            data-filename="Face Puzzle Game"
+                            data-gallery='["assets/face-puzzle-game(1).png", "assets/face-puzzle-game(2).png"]'>
+                        <div class="project-content">
+                            <div class="project-header">
+                                <i class="fa-regular fa-folder-open"></i>
+                                <div class="project-links">
+                                    <a href="https://github.com/nathanielsteave/face-puzzle-web" target="_blank"
+                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
+                                    <a href="https://face-puzzle-web.vercel.app/" target="_blank"
+                                        aria-label="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                                </div>
+                            </div>
+                            <h3 class="project-title">Face Puzzle Game</h3>
+                            <p class="project-desc">A fully client-side interactive computer vision game powered by MediaPipe Web. It captures photos using hand gesture recognition (forming a square) and allows users to solve a dynamically generated sliding puzzle via real-time index finger tracking—processed entirely in the browser.</p>
+                            <ul class="project-tech">
+                                <li>JavaScript</li>
+                                <li>MediaPipe Web</li>
+                                <li>HTML5 Canvas</li>
+                                <li>Vercel</li>
                             </ul>
                         </div>
                     </div>
