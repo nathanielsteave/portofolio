@@ -1,744 +1,523 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Portofolio Nathaniel Steave Harjanto.">
     <meta name="author" content="Nathaniel Steave Harjanto">
     <meta name="description"
-        content="Portofolio Nathaniel Steave Harjanto, mahasiswa Informatika UNS yang memiliki ketertarikan pada Data Science dan Web Development.">
+        content="Portofolio Nathaniel Steave Harjanto — mahasiswa Informatika UNS yang fokus pada Data Science dan Web Development.">
     <meta property="og:title" content="Nathaniel Steave Harjanto | IT Enthusiast">
     <meta property="og:description" content="Jelajahi proyek web development dan data science karya Nathaniel Steave.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nathanielsteave.vercel.app">
     <title>Nathaniel Steave Harjanto | IT Enthusiast</title>
 
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@500&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css" />
+
+    <!-- Three.js -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
 </head>
 
-<body class="light-theme">
-    <canvas id="canvas-3d-bg"></canvas>
-    <div class="cursor-glow" id="cursor-glow"></div>
+<body>
+    <!-- 3D Canvas Background -->
+    <canvas id="three-canvas"></canvas>
 
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursor-follower"></div>
+
+    <!-- Welcome Overlay -->
     <div class="welcome-overlay" id="welcome-overlay">
         <div class="welcome-content">
             <h1 class="welcome-title">Nathaniel Steave Harjanto</h1>
-            <p class="welcome-subtitle">
-                <span>C</span><span>o</span><span>n</span><span>n</span><span>e</span><span>c</span><span>t</span><span>i</span><span>n</span><span>g</span>
-                <span class="space"></span>
-                <span>i</span><span>d</span><span>e</span><span>a</span><span>s</span>
-                <span class="space"></span>
-                <span>t</span><span>h</span><span>r</span><span>o</span><span>u</span><span>g</span><span>h</span>
-                <span class="space"></span>
-                <span>c</span><span>o</span><span>d</span><span>e</span><span>.</span><span>.</span><span>.</span>
-            </p>
+            <p class="welcome-subtitle" id="welcome-scramble">Connecting ideas through code...</p>
         </div>
     </div>
 
+    <!-- Header Navigation -->
     <header class="main-header" id="main-header">
-        <div class="header-content">
-            <div class="logo">Portofolio</div>
-            <nav class="header-nav" id="header-nav">
-                <ul>
-                    <li><a href="#about">About Me</a></li>
-                    <li><a href="#education">Education</a></li>
-                    <li><a href="#experience">Experience</a></li>
-                    <li><a href="#projects">Projects</a></li>
-                    <li><a href="#skills">Skills</a></li>
-                    <li><a href="#certificates">Certificates</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+        <div class="header-inner">
+            <a href="#home" class="logo">NSH<span class="logo-dot">.</span></a>
+            <nav class="desktop-nav">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#certificates" class="nav-link">Certificates</a>
+                <a href="#contact" class="nav-link">Contact</a>
             </nav>
-
             <div class="header-actions">
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Light/Dark Mode">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle theme">
                     <i class="fa-solid fa-moon"></i>
                 </button>
-
-                <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Menu">
-                    <span class="hamburger-bar"></span>
-                    <span class="hamburger-bar"></span>
-                    <span class="hamburger-bar"></span>
+                <a href="assets/Nathaniel_Steave_Harjanto_Resume.pdf" download class="btn-outline-sm">CV</a>
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Menu">
+                    <span></span><span></span><span></span>
                 </button>
             </div>
         </div>
     </header>
 
-    <nav class="side-nav">
-        <ul>
-            <li><a href="#home" class="nav-dot active" data-section="home" aria-label="Home"></a></li>
-            <li><a href="#about" class="nav-dot" data-section="about" aria-label="About Me"></a></li>
-            <li><a href="#education" class="nav-dot" data-section="education" aria-label="Education"></a></li>
-            <li><a href="#experience" class="nav-dot" data-section="experience" aria-label="Experience"></a></li>
-            <li><a href="#projects" class="nav-dot" data-section="projects" aria-label="Projects"></a></li>
-            <li><a href="#skills" class="nav-dot" data-section="skills" aria-label="Skills"></a></li>
-            <li><a href="#certificates" class="nav-dot" data-section="certificates" aria-label="Certificates"></a></li>
-            <li><a href="#contact" class="nav-dot" data-section="contact" aria-label="Contact"></a></li>
-        </ul>
-    </nav>
-    
-    <div class="scroll-progress">
-        <div class="scroll-progress-bar"></div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu">
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#education">Education</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#certificates">Certificates</a>
+            <a href="#contact">Contact</a>
+        </nav>
     </div>
-    
-    <main class="main-container">
 
-        <section id="home" class="fullscreen-section">
-            <div class="content-wrapper">
-                <p class="hero-intro reveal">Hello, I'm</p>
-                <h1 class="hero-name reveal" data-delay="100">Nathaniel
-                    Steave Harjanto.</h1>
-                <h2 class="hero-tagline reveal" data-delay="200">Exploring
-                    data-driven and web-based solutions.</h2>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scroll-progress"></div>
+
+    <main>
+        <!-- ===== HERO ===== -->
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <p class="hero-greeting reveal">Hello, I'm</p>
+                <h1 class="hero-name reveal" data-delay="100">Nathaniel Steave<br>Harjanto<span
+                        class="hero-dot">.</span></h1>
+                <h2 class="hero-tagline reveal" data-delay="200">Exploring data-driven and<br>web-based solutions.</h2>
                 <p class="hero-description reveal" data-delay="300">
-                    I'm a Informatics student with a strong
-                    foundation in web development and database management.
-                    Currently, I'm expanding my expertise in data science to
-                    solve real-world challenges through data-driven insights
-                    and innovative digital solutions.
+                    Informatics student with a strong foundation in web development and database management.
+                    Currently expanding expertise in data science to solve real-world challenges.
                 </p>
-                <div class="reveal" data-delay="400" style="display: flex; gap: 15px;">
-                    <a href="#projects" class="btn-primary">My Projects
-                        →</a>
-                    <a href="assets/CV.pdf" download="CV-Nathaniel-Steave-Harjanto.pdf" class="btn-primary">Download
-                        CV</a>
+                <div class="hero-buttons reveal" data-delay="400">
+                    <a href="#projects" class="btn-primary">
+                        <span>My Projects</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="assets/CV.pdf" download class="btn-secondary">
+                        <span>Download CV</span>
+                        <i class="fa-solid fa-download"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-visual" id="hero-visual">
+                <div class="floating-card card-1">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Full-Stack</span>
+                </div>
+                <div class="floating-card card-2">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Data Science</span>
+                </div>
+                <div class="floating-card card-3">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>AI/ML</span>
                 </div>
             </div>
         </section>
 
-        <section id="about" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>01.</span> About
-                    Me</h2>
-                <div class="about-container">
+        <!-- ===== ABOUT ===== -->
+        <section id="about" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">01.</span> About Me</h2>
+                <div class="about-grid">
                     <div class="about-text reveal">
                         <p>
-                            I'm an IT enthusiast passionate about building
-                            meaningful digital experiences through web
-                            development, data, and AI-driven solutions.
-                            With a strong foundation in Python, Java, C++,
-                            and PHP, along with hands-on experience using
-                            MySQL and Laravel,
-                            I enjoy turning complex ideas into functional,
-                            user-focused applications.
+                            I'm an IT enthusiast passionate about building meaningful digital experiences through web
+                            development, data, and AI-driven solutions. With a strong foundation in Python, Java, C++,
+                            and PHP, along with hands-on experience using MySQL and Laravel, I enjoy turning complex
+                            ideas into functional, user-focused applications.
                         </p>
                         <p>
-                            My current focus is on data science, where I
-                            explore how machine learning and data analytics
-                            can transform raw data into actionable insights.
-                            I'm driven by curiosity and a desire to keep
-                            learning — constantly experimenting with new
-                            technologies to craft innovative and impactful
-                            digital solutions that make a difference.
+                            My current focus is on data science, where I explore how machine learning and data analytics
+                            can transform raw data into actionable insights. I'm driven by curiosity and a desire to
+                            keep learning — constantly experimenting with new technologies.
                         </p>
+                        <div class="about-stats">
+                            <div class="stat-item reveal">
+                                <span class="stat-number" data-target="15">0</span>
+                                <span class="stat-label">Projects</span>
+                            </div>
+                            <div class="stat-item reveal">
+                                <span class="stat-number" data-target="9">0</span>
+                                <span class="stat-label">Certificates</span>
+                            </div>
+                            <div class="stat-item reveal">
+                                <span class="stat-number">3.53</span>
+                                <span class="stat-label">GPA</span>
+                            </div>
+                            <div class="stat-item reveal">
+                                <span class="stat-number" data-target="5000">0</span>
+                                <span class="stat-label">Lines of Code</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="about-photo reveal" data-delay="200">
-                        <img src="assets/profile.jpg" alt="Foto Nathaniel Steave Harjanto">
+                    <div class="about-image reveal" data-delay="200">
+                        <div class="image-frame">
+                            <img src="assets/profile.jpg" alt="Nathaniel Steave Harjanto" loading="lazy">
+                            <div class="frame-decoration"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="education" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>02.</span>
-                    Education</h2>
+        <!-- ===== EDUCATION ===== -->
+        <section id="education" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">02.</span> Education</h2>
                 <div class="education-card reveal">
-                    <h3>Sebelas Maret University</h3>
-                    <p>Bachelor of Informatics (2022 - Present)</p>
-                    <p>GPA: 3.53 / 4.00</p>
-                    <p class="relevant-courses">Relevant Courses:
-                        Programming Concepts, Web Programming, Databases,
-                        Artificial Intelligence,
-                        Machine Learning, Data Structures and Algorithms,
-                        Data Mining.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>03.</span>
-                    Experience</h2>
-                <div class="experience-tabs reveal">
-                    <div class="tab-buttons">
-                        <button class="tab-btn active" data-tab="work">Work
-                            & Independent Study</button>
-                        <button class="tab-btn" data-tab="org">Organization</button>
-                    </div>
-                    <div class="tab-content">
-                        <div id="work" class="tab-pane active">
-                            <h3>IT Intern <span class="text-accent">| SMKN 4
-                                    Klaten</span></h3>
-                            <p class="exp-date">February - April 2025</p>
-                            <ul>
-                                <li>Built a web-based attendance system with
-                                    geolocation using Laravel and MySQL,
-                                    streamlining daily attendance
-                                    tracking.</li>
-                                <li>Modernized record-keeping by digitizing
-                                    manual processes, improving data
-                                    integrity and reducing human error.</li>
-                                <li>Worked across the full development cycle
-                                    from requirement gathering to deployment
-                                    and testing.</li>
-                            </ul>
-                            <h3>Independent Study - Data Science <span class="text-accent">| Kampus Merdeka,
-                                    Startup Campus</span></h3>
-                            <p class="exp-date">September - December
-                                2024</p>
-                            <ul>
-                                <li>Developed a machine learning model with
-                                    Random Forest Regression to predict CO₂
-                                    emissions in Spain.</li>
-                                <li>Created interactive data visualizations
-                                    to uncover insights on green economic
-                                    transformation.</li>
-                                <li>Delivered a predictive analytics project
-                                    showcased during the Selection to
-                                    Showcase event.</li>
-                            </ul>
+                    <div class="edu-header">
+                        <div class="edu-logo">
+                            <img src="assets/logo-uns.png" alt="UNS Logo">
                         </div>
-                        <div id="org" class="tab-pane">
-                            <h3>Entrepreneurship Staff <span class="text-accent">|
-                                    HIMASTER</span></h3>
-                            <p class="exp-date">January - December 2023</p>
-                            <ul>
-                                <li>Designed and published marketing visuals
-                                    and social media campaigns to support
-                                    business initiatives.</li>
-                                <li>Managed sales operations and ensured
-                                    accurate transaction tracking and
-                                    revenue reporting.</li>
-                                <li>Contributed to branding efforts by
-                                    producing engaging promotional
-                                    materials.</li>
-                            </ul>
-                            <h3>Fundraising Staff <span class="text-accent">|
-                                    P!NGFEST</span></h3>
-                            <p class="exp-date">March - September 2023</p>
-                            <ul>
-                                <li>Organized fundraising campaigns and
-                                    successfully achieved a revenue target
-                                    of around Rp 10 million within six
-                                    months.</li>
-                                <li>Produced monthly revenue reports and
-                                    optimized fund management for each
-                                    project.</li>
-                            </ul>
+                        <div class="edu-info">
+                            <span class="edu-badge">Undergraduate</span>
+                            <h3>Sebelas Maret University (UNS)</h3>
+                            <p class="edu-major">Bachelor of Informatics • 2022 – Present</p>
+                        </div>
+                    </div>
+                    <div class="edu-body">
+                        <div class="edu-gpa">
+                            <div class="gpa-circle">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="52" class="gpa-bg"></circle>
+                                    <circle cx="60" cy="60" r="52" class="gpa-fill" stroke-dasharray="326.7"
+                                        stroke-dashoffset="39.2"></circle>
+                                </svg>
+                                <div class="gpa-text">
+                                    <span class="gpa-value">3.53</span>
+                                    <span class="gpa-max">/ 4.00</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="edu-courses">
+                            <span class="courses-label">Relevant Coursework</span>
+                            <div class="course-tags">
+                                <span>Programming</span>
+                                <span>Machine Learning</span>
+                                <span>Data Mining</span>
+                                <span>Web Dev</span>
+                                <span>AI</span>
+                                <span>Data Structures</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="projects" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>04.</span>
-                    Projects</h2>
-                <div class="project-filter-buttons reveal">
+        <!-- ===== EXPERIENCE ===== -->
+        <section id="experience" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">03.</span> Experience</h2>
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">Feb 2025 – Apr 2025</span>
+                            <h3>IT Intern</h3>
+                            <span class="timeline-org">SMKN 4 Klaten</span>
+                            <ul>
+                                <li>Built web-based attendance system with geolocation using Laravel & MySQL.</li>
+                                <li>Digitized manual record-keeping processes, improving data integrity.</li>
+                                <li>Full development cycle: requirement gathering to deployment.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">Sep 2024 – Dec 2024</span>
+                            <h3>Independent Study – Data Science</h3>
+                            <span class="timeline-org">Kampus Merdeka, Startup Campus</span>
+                            <ul>
+                                <li>Developed ML model with Random Forest Regression to predict CO₂ emissions.</li>
+                                <li>Created interactive visualizations for green economic transformation insights.</li>
+                                <li>Delivered predictive analytics project for Selection to Showcase event.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">Jan 2023 – Dec 2023</span>
+                            <h3>Entrepreneurship Staff</h3>
+                            <span class="timeline-org">HIMASTER</span>
+                            <ul>
+                                <li>Designed marketing visuals and social media campaigns.</li>
+                                <li>Managed sales operations and transaction tracking.</li>
+                                <li>Contributed to branding with engaging promotional materials.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">Mar 2023 – Sep 2023</span>
+                            <h3>Fundraising Staff</h3>
+                            <span class="timeline-org">P!NGFEST</span>
+                            <ul>
+                                <li>Organized fundraising campaigns achieving ~Rp 10 million in 6 months.</li>
+                                <li>Produced monthly reports and optimized fund management.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PROJECTS ===== -->
+        <section id="projects" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">04.</span> Projects</h2>
+                <div class="filter-bar reveal">
                     <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="basic">Basic Web
-                        & Programming</button>
-                    <button class="filter-btn" data-filter="web">Web
-                        Development</button>
-                    <button class="filter-btn" data-filter="data">Data
-                        Science</button>
+                    <button class="filter-btn" data-filter="web">Web Dev</button>
+                    <button class="filter-btn" data-filter="data">Data Science</button>
                     <button class="filter-btn" data-filter="ai">AI</button>
                     <button class="filter-btn" data-filter="cv">Computer Vision</button>
+                    <button class="filter-btn" data-filter="basic">Basic Web</button>
                 </div>
-                <div class="project-grid">
-                    <!-- Semua proyek dari file asli dipertahankan -->
-                    <div class="project-card reveal" data-category="web">
-                        <img src="assets/sukha.png" alt="Project Sukha POS" class="zoomable-image"
-                            data-filename="Sukha POS">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/sukharesto/Sukha-Serve" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://sukha.great-site.net/" target="_blank" aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">Sukha POS</h3>
-                            <p class="project-desc">A Point of Sales (POS)
-                                website for restaurants that digitizes the
-                                entire process from ordering to payment to
-                                increase efficiency.</p>
-                            <ul class="project-tech">
-                                <li>Laravel</li>
-                                <li>PHP</li>
-                                <li>MySQL</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-delay="100" data-category="data">
-                        <img src="assets/co2-spain.png" alt="Project Analisis Emisi CO2" class="zoomable-image"
-                            data-filename="C02 Emmision Analysis">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://lookerstudio.google.com/s/j9UaD2x0vrk" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">CO2 Emmision
-                                Analysis</h3>
-                            <p class="project-desc">Data analysis and
-                                machine learning models to predict CO2
-                                emissions in Spain, complemented by
-                                interactive visualizations to support
-                                sustainable decisions.</p>
-                            <ul class="project-tech">
-                                <li>Python</li>
-                                <li>Random
-                                    Forest</li>
-                                <li>Looker Studio</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-delay="200" data-category="web">
-                        <img src="assets/sipeta-cuaca-tani.png" alt="Project Sipeta Cuaca Tani" class="zoomable-image"
-                            data-filename="Sipeta Cuaca Tani">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/sipeta-cuaca-tani" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://sipeta-cuaca-tani.vercel.app/" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">SiPETA CUACA TANI</h3>
-                            <p class="project-desc">A web-based information
-                                system that provides accurate weather
-                                predictions to help farmers plan
-                                agricultural activities effectively.</p>
-                            <ul class="project-tech">
-                                <li>Python</li>
-                                <li>Flask</li>
-                                <li>Weather
-                                    API</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-delay="300" data-category="basic">
-                        <img src="assets/bmi-calculator.png" alt="BMI Calculator" class="zoomable-image"
-                            data-filename="BMI Calculator">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/bmi-calculator" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://bmi-calculator-mocha-eight-47.vercel.app/" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">BMI Calculator</h3>
-                            <p class="project-desc">A responsive,
-                                single-page application built with HTML5,
-                                CSS3, and Vanilla JavaScript. This project
-                                features real-time calculation via DOM
-                                manipulation and a persistent dark mode
-                                toggle that saves user preference to
-                                localStorage.</p>
-                            <ul class="project-tech">
-                                <li>HTML</li>
-                                <li>CSS</li>
-                                <li>JavaScript</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-delay="400" data-category="basic">
-                        <img src="assets/to-do-list.png" alt="To-Do-List" class="zoomable-image"
-                            data-filename="To-Do-List">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/to-do-list" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https.vercel.app/" target="_blank" aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">To-Do-List</h3>
-                            <p class="project-desc">A responsive,
-                                single-page
-                                application built with HTML5, CSS3, and
-                                Vanilla
-                                JavaScript. This project demonstrates full
-                                CRUD
-                                (Create, Read, Update, Delete)
-                                functionality,
-                                persistent storage using localStorage, and
-                                date
-                                handling. Key features include task editing,
-                                deadline input, "overdue" task highlighting,
-                                and
-                                a persistent dark mode.</p>
-                            <ul class="project-tech">
-                                <li>HTML</li>
-                                <li>CSS</li>
-                                <li>JavaScript</li>
-                                <li>CRUD</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-delay="500" data-category="basic">
-                        <img src="assets/notes-app.png" alt="Notes App" class="zoomable-image"
-                            data-filename="Notes App">
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/notes-app" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://notes-app-mu-jade.vercel.app/" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">Notes App</h3>
-                            <p class="project-desc">A dual-pane note-taking
-                                application built with HTML5, CSS3, and
-                                Vanilla
-                                JavaScript. This project features full CRUD
-                                (Create, Read, Update, Delete)
-                                functionality,
-                                auto-saving with a debounce function, and
-                                persistent data storage using
-                                localStorage.</p>
-                            <ul class="project-tech">
-                                <li>HTML</li>
-                                <li>CSS</li>
-                                <li>JavaScript</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-category="ai">
-                        <img src="assets/ai-code-reviewer (4).png" alt="AI Code Reviewer" class="zoomable-image"
-                            data-filename="AI Code Reviewer"
-                            data-gallery='["assets/ai-code-reviewer (4).png", "assets/ai-code-reviewer (1).png", "assets/ai-code-reviewer (2).png", "assets/ai-code-reviewer (3).png"]'>
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/ai-code-reviewer" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">AI Code Reviewer</h3>
-                            <p class="project-desc">A diagnostic
-                                client-server application for deep Python
-                                code inspection. Leverages static analysis
-                                and the Llama 3.1 model to instantly uncover
-                                logical bugs, styling deviations, and
-                                performance bottlenecks.</p>
-                            <ul class="project-tech">
-                                <li>Python</li>
-                                <li>FastAPI</li>
-                                <li>Groq AI</li>
-                                <li>Vanilla JS</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-category="ai">
-                        <img src="assets/crypto-pulse(1).png" alt="Crypto Pulse AI" class="zoomable-image"
-                            data-filename="Crypto Pulse AI"
-                            data-gallery='["assets/crypto-pulse(1).png", "assets/crypto-pulse(2).png", "assets/crypto-pulse(3).png"]'>
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/ai-crypto-pulse" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://ai-crypto-pulse-t7hwrda7cupn98e4uxkbyc.streamlit.app/" target="_blank"
-                                        aria-label="Live Demo"><i
-                                            class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">Crypto Pulse AI</h3>
-                            <p class="project-desc">A Web3 Intelligence Platform that tracks real-time cryptocurrency prices, on-chain whale activities, and analyzes market sentiment using Groq AI (Llama 3.1) and Plotly interactive charts.</p>
-                            <ul class="project-tech">
-                                <li>Python</li>
-                                <li>Streamlit</li>
-                                <li>Groq AI</li>
-                                <li>Plotly</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="project-card reveal" data-category="cv">
-                        <img src="assets/face-puzzle-game(1).png" alt="Face Puzzle Game" class="zoomable-image"
-                            data-filename="Face Puzzle Game"
-                            data-gallery='["assets/face-puzzle-game(1).png", "assets/face-puzzle-game(2).png"]'>
-                        <div class="project-content">
-                            <div class="project-header">
-                                <i class="fa-regular fa-folder-open"></i>
-                                <div class="project-links">
-                                    <a href="https://github.com/nathanielsteave/face-puzzle-web" target="_blank"
-                                        aria-label="GitHub Repository"><i class="fa-brands fa-github"></i></a>
-                                    <a href="https://face-puzzle-web.vercel.app/" target="_blank"
-                                        aria-label="Live Demo"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                                </div>
-                            </div>
-                            <h3 class="project-title">Face Puzzle Game</h3>
-                            <p class="project-desc">A fully client-side interactive computer vision game powered by MediaPipe Web. It captures photos using hand gesture recognition (forming a square) and allows users to solve a dynamically generated sliding puzzle via real-time index finger tracking—processed entirely in the browser.</p>
-                            <ul class="project-tech">
-                                <li>JavaScript</li>
-                                <li>MediaPipe Web</li>
-                                <li>HTML5 Canvas</li>
-                                <li>Vercel</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="project-grid" id="project-grid">
+                    <!-- Project cards akan dirender oleh JS -->
                 </div>
             </div>
         </section>
 
-        <!-- SECTION: SKILLS -->
-        <section id="skills" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>05.</span> Skills &
-                    Technology</h2>
+        <!-- ===== SKILLS ===== -->
+        <section id="skills" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">05.</span> Skills & Technology</h2>
                 <div class="skills-grid">
                     <div class="skill-category reveal">
-                        <h3>Hard Skills</h3>
-                        <ul>
-                            <li>Programming (Python, Java, C++, PHP)</li>
-                            <li>Web Development (HTML, CSS, JS)</li>
-                            <li>Data Analysis & Machine Learning</li>
-                            <li>Database Management (MySQL)</li>
-                            <li>Framework (Laravel)</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category reveal" data-delay="100">
-                        <h3>Soft Skills</h3>
-                        <ul>
-                            <li>Teamwork & Collaboration</li>
-                            <li>Problem Solving</li>
-                            <li>Adaptability & Flexibility</li>
-                            <li>Critical & Creative Thinking</li>
-                            <li>Time Management</li>
-                        </ul>
-                    </div>
-                    <div class="skill-category reveal" data-delay="200">
-                        <h3>Tools & Languages</h3>
-                        <ul>
-                            <li>Microsoft Office</li>
-                            <li>Canva & Visual Design</li>
-                            <li>Git & GitHub</li>
-                            <li>Indonesian Language (Professional)</li>
-                            <li>English Language (Native)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="certificates" class="fullscreen-section">
-            <div class="content-wrapper">
-                <h2 class="section-title reveal"><span>06.</span>
-                    Certificates</h2>
-                <div class="certificate-grid">
-
-                    <div class="certificate-card reveal">
-                        <img src="assets/dasar-data-science.png" alt="Certificate Dicoding 1" class="zoomable-image"
-                            data-filename="Belajar Dasar Data Science">
-                        <div class="certificate-content">
-                            <a href="https://www.dicoding.com/certificates/4EXGQLY71ZRL" target="_blank"
-                                class="certificate-link" aria-label="Lihat Sertifikat"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            <h4>Certification of Completion Course "Belajar
-                                Dasar Data Science</h4>
-                            <p>Dicoding
-                                Indonesia</p>
+                        <div class="skill-cat-header">
+                            <i class="fas fa-laptop-code"></i>
+                            <h3>Programming</h3>
+                        </div>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item"><span>Python</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>JavaScript</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="80"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>Java</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>PHP</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="70"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="certificate-card reveal" data-delay="100">
-                        <img src="assets/dasar-sql.png" alt="Certificate Dicoding 2" class="zoomable-image"
-                            data-filename="Belajar Dasar SQL">
-                        <div class="certificate-content">
-                            <a href="https://www.dicoding.com/certificates/MRZME1K5KPYQ" target="_blank"
-                                class="certificate-link" aria-label="Lihat Sertifikat"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            <h4>Certification of Completion Course "Belajar
-                                Dasar Structured Query Language
-                                (SQL)</h4>
-                            <p>Dicoding Indonesia</p>
+                    <div class="skill-category reveal">
+                        <div class="skill-cat-header">
+                            <i class="fas fa-globe"></i>
+                            <h3>Web Development</h3>
+                        </div>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item"><span>HTML5 / CSS3</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="90"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>Laravel</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>MySQL</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="80"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="certificate-card reveal" data-delay="200">
-                        <img src="assets/dasar-manajemenproyek.png" alt="Certificate Dicoding 3" class="zoomable-image"
-                            data-filename="Belajar Dasar Manajemen Proyek">
-                        <div class="certificate-content">
-                            <a href="https://www.dicoding.com/certificates/JLX17Y37GX72" target="_blank"
-                                class="certificate-link" aria-label="Lihat Sertifikat"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            <h4>Certification of Completion Course "Belajar
-                                Dasar Manajemen Proyek</h4>
-                            <p>Dicoding
-                                Indonesia</p>
+                    <div class="skill-category reveal">
+                        <div class="skill-cat-header">
+                            <i class="fas fa-brain"></i>
+                            <h3>Data Science & AI</h3>
+                        </div>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item"><span>Machine Learning</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="70"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>Data Analysis</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="75"></div>
+                                </div>
+                            </div>
+                            <div class="skill-bar-item"><span>Computer Vision</span>
+                                <div class="bar">
+                                    <div class="fill" data-width="65"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="certificate-card reveal" data-delay="300">
-                        <img src="assets/dasar-ai.png" alt="Certificate Dicoding 4" class="zoomable-image"
-                            data-filename="Belajar Dasar AI">
-                        <div class="certificate-content">
-                            <a href="https://www.dicoding.com/certificates/4EXGQ26QQZRL" target="_blank"
-                                class="certificate-link" aria-label="Lihat Sertifikat"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            <h4>Certification of Completion Course
-                                "Belajar Dasar AI"</h4>
-                            <p>Great Learning</p>
+                    <div class="skill-category reveal">
+                        <div class="skill-cat-header">
+                            <i class="fas fa-tools"></i>
+                            <h3>Tools & Software</h3>
                         </div>
-                    </div>
-
-                    <div class="certificate-card reveal" data-delay="400">
-                        <img src="assets/cisco-jarkom.png" alt="Certificate Cisco" class="zoomable-image"
-                            data-filename="CCNAv7: Introduction to Networks">
-                        <div class="certificate-content">
-                            <h4>Cisco Networking Academy CCNAv7:
-                                Introduction to Networks - Certificate of
-                                Completion</h4>
-                            <p>Cisco Networking
-                                Academy</p>
-                        </div>
-                    </div>
-
-                    <div class="certificate-card reveal" data-delay="500">
-                        <img src="assets/myskill-frontend.png" alt="Certificate MySkill" class="zoomable-image"
-                            data-filename="Short Class FrontEnd Development">
-                        <div class="certificate-content">
-                            <h4>Short Class FrontEnd
-                                Development</h4>
-                            <p>MySkill</p>
-                        </div>
-                    </div>
-
-                    <div class="certificate-card reveal" data-delay="600">
-                        <img src="assets/myskill-uxwriting.png" alt="Certificate MySkill" class="zoomable-image"
-                            data-filename="Short Class UX Writing">
-                        <div class="certificate-content">
-                            <h4>Short Class UX Writing</h4>
-                            <p>MySkill</p>
-                        </div>
-                    </div>
-
-                    <div class="certificate-card reveal" data-delay="700">
-                        <img src="assets/competitive-programming-pingfest.png" alt="Certificate P!NGEST"
-                            class="zoomable-image" data-filename="Certificate of Competitive Programming">
-                        <div class="certificate-content">
-                            <h4>Certificate of Participation of Competitive
-                                Programming</h4>
-                            <p>P!NGFEST</p>
-                        </div>
-                    </div>
-
-                    <div class="certificate-card reveal" data-delay="800">
-                        <img src="assets/msib-sc-datascience.png" alt="Certificate StartupCampus" class="zoomable-image"
-                            data-filename="Kampus Merdeka - Data Science">
-                        <div class="certificate-content">
-                            <a href="https://www.startupcampus.id/certificate/public/KM7-DS33E6" target="_blank"
-                                class="certificate-link" aria-label="Lihat Sertifikat"><i
-                                    class="fa-solid fa-arrow-up-right-from-square"></i></a>
-                            <h4>Kampus Merdeka Batch 7 - Data Science:
-                                Greener Future with Data Driven
-                                Solution"</h4>
-                            <p>Startup Campus</p>
+                        <div class="tool-grid">
+                            <div class="tool-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
+                            <div class="tool-item"><i class="fab fa-github"></i><span>GitHub</span></div>
+                            <div class="tool-item"><i class="fab fa-figma"></i><span>Figma</span></div>
+                            <div class="tool-item"><i class="fas fa-file-excel"></i><span>Excel</span></div>
+                            <div class="tool-item"><i class="fas fa-chart-bar"></i><span>Looker Studio</span></div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="fullscreen-section">
-            <div class="content-wrapper contact-layout">
-                <p class="contact-subheading reveal">07. What's next?</p>
-                <h2 class="contact-heading reveal" data-delay="100">Contact Me</h2>
+        <!-- ===== CURRENTLY LEARNING ===== -->
+        <section id="learning" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">06.</span> Currently Learning</h2>
+                <div class="learning-grid">
+                    <div class="learning-card reveal">
+                        <div class="learning-icon"><i class="fab fa-react"></i></div>
+                        <h3>React & Next.js</h3>
+                        <p>Building modern server-rendered web applications with App Router & Server Actions.</p>
+                    </div>
+                    <div class="learning-card reveal" data-delay="100">
+                        <div class="learning-icon"><i class="fas fa-brain"></i></div>
+                        <h3>Deep Learning</h3>
+                        <p>Exploring neural networks, transformers, and computer vision with PyTorch & HuggingFace.</p>
+                    </div>
+                    <div class="learning-card reveal" data-delay="200">
+                        <div class="learning-icon"><i class="fab fa-docker"></i></div>
+                        <h3>DevOps & Cloud</h3>
+                        <p>Mastering containerization, CI/CD pipelines, and AWS cloud architecture.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CERTIFICATES ===== -->
+        <section id="certificates" class="section">
+            <div class="section-container">
+                <h2 class="section-title reveal"><span class="section-num">07.</span> Certificates</h2>
+                <div class="certificate-grid" id="certificate-grid">
+                    <!-- Certificate cards akan dirender oleh JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CONTACT ===== -->
+        <section id="contact" class="section">
+            <div class="section-container contact-container">
+                <p class="contact-sub reveal">08. What's next?</p>
+                <h2 class="contact-heading reveal" data-delay="100">Get In Touch</h2>
                 <p class="contact-text reveal" data-delay="200">
-                    I always open to discuss about new chance, collaboration project, or just exchange ideas. Feel free
-                    to contact me!
+                    I'm always open to discuss new opportunities, collaboration projects, or just exchange ideas.
+                    Feel free to reach out!
                 </p>
-
                 <form action="https://formspree.io/f/xbdpjvyy" method="POST" class="contact-form reveal"
                     data-delay="300">
-                    <div class="form-group">
-                        <input type="text" name="name" placeholder="Your Name" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" placeholder="John Doe" required
+                                autocomplete="name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" placeholder="john@example.com" required
+                                autocomplete="email">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <input type="email" name="email" placeholder="Your Email" required>
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Hello, I'd like to discuss..."
+                            required></textarea>
                     </div>
-                    <div class="form-group">
-                        <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
-                    </div>
-                    <button type="submit" class="btn-primary">Send Message</button>
+                    <button type="submit" class="btn-primary">
+                        <span>Send Message</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
                 </form>
             </div>
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="main-footer">
-        <div class="social-links">
-            <a href="https://linkedin.com/in/nathanielsteaveharjanto/" target="_blank" aria-label="LinkedIn"><i
-                    class="fa-brands fa-linkedin-in"></i></a>
-            <a href="https://github.com/nathanielsteave" target="_blank" aria-label="GitHub"><i
-                    class="fa-brands fa-github"></i></a>
+        <div class="footer-inner">
+            <div class="footer-social">
+                <a href="https://linkedin.com/in/nathanielsteaveharjanto/" target="_blank" rel="noopener noreferrer"
+                    aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/nathanielsteave" target="_blank" rel="noopener noreferrer"
+                    aria-label="GitHub">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+            <span id="visitor-counter" class="visitor-badge">👁️ Loading views...</span>
+            <p class="footer-copy">Design & Build by Nathaniel Steave Harjanto © <span id="year"></span></p>
         </div>
-        <p>Design & Build by Nathaniel Steave Harjanto</p>
     </footer>
 
-    <div id="image-modal" class="image-modal">
-        <div class="image-modal-container">
-            <div class="image-modal-header">
-                <span id="modal-filename" class="modal-filename"></span>
-                <span class="close-modal" id="close-modal">&times;</span>
-            </div>
-            <div class="image-modal-body" style="position: relative;">
-                <button id="modal-prev" class="modal-nav-btn" style="display: none;">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-
-                <img class="modal-content" id="modal-image">
-
-                <button id="modal-next" class="modal-nav-btn" style="display: none;">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
+    <!-- Project Detail Modal -->
+    <div class="modal-overlay" id="project-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            <div class="modal-body">
+                <div class="modal-image-container">
+                    <img src="" alt="" id="modal-image" loading="lazy">
+                    <button class="modal-nav prev" id="modal-prev"><i class="fas fa-chevron-left"></i></button>
+                    <button class="modal-nav next" id="modal-next"><i class="fas fa-chevron-right"></i></button>
+                    <div class="modal-dots" id="modal-dots"></div>
+                </div>
+                <div class="modal-info">
+                    <h2 id="modal-title"></h2>
+                    <p id="modal-description"></p>
+                    <div class="modal-tech-tags" id="modal-tech-tags"></div>
+                    <div class="modal-links" id="modal-links"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <button id="back-to-top" class="back-to-top" aria-label="Back to top">
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top" aria-label="Back to top">
         <i class="fa-solid fa-arrow-up"></i>
     </button>
 
-    <script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
+    <script src="script.js" type="module"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 
 </html>
