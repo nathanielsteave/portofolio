@@ -201,6 +201,38 @@ const projectsData = [
         github: 'https://github.com/nathanielsteave/face-puzzle-web',
         external: 'https://face-puzzle-web.vercel.app/',
     },
+    {
+    id: 'race-pace-calculator',
+    title: 'Race Pace Calculator',
+    description: 'An interactive web application for runners to calculate race paces, view per-kilometer splits, predict finish times, and import GPX files to adjust estimated times based on elevation gain.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Chart.js'],
+    category: 'web',
+    image: 'assets/race-pace-calculator.png',
+    github: 'https://github.com/nathanielsteave/race-pace-calculator',
+    external: 'https://race-pace-calculator-three.vercel.app/',
+    },
+    {
+    id: 'collabboard',
+    title: 'CollabBoard',
+    description: 'A real-time collaborative whiteboard web application featuring freehand drawing, shape tools, text input, pan/zoom capabilities, and live chat within shared rooms.',
+    tech: ['HTML', 'CSS', 'JavaScript', 'Socket.io', 'Canvas API'],
+    category: 'web',
+    image: 'assets/collaboard(3).png',
+    gallery: ['assets/collaboard(1).png', 'assets/collaboard(2).png'],
+    github: 'https://github.com/nathanielsteave/collabboard',
+    external: 'https://collaboard-rz5c.vercel.app/',
+    },
+    {
+    id: 'visiobus26',
+    title: 'VisioBus26 (Visionary Business)',
+    description: 'A futuristic catalog website that presents trend predictions and a directory of business ideas for 2026. Equipped with a dark-themed UI (glassmorphism), interactive category filters, and responsive design.',
+    tech: ['HTML', 'Tailwind CSS', 'JavaScript'],
+    category: 'web',
+    image: 'assets/visiobus(1).png', 
+    gallery: ['assets/visiobus(1).png', 'assets/visiobus(2).png', 'assets/visiobus(3).png', 'assets/visiobus(4).png', 'assets/visiobus(5).png', 'assets/visiobus(6).png', 'assets/visiobus(7).png'],
+    github: 'https://github.com/nathanielsteave/website-celine',
+    external: 'https://website-celine.vercel.app/index.html',
+    },
 ];
 
 const certificatesData = [
