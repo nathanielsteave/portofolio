@@ -233,6 +233,16 @@ const projectsData = [
     github: 'https://github.com/nathanielsteave/website-celine',
     external: 'https://website-celine.vercel.app/index.html',
     },
+    {
+    id: 'nutrifood-figma',
+    title: 'NutriFood Mobile Design',
+    description: 'A modern, user-centric mobile UI/UX design for a nutrition tracker and healthy food ordering platform, featuring highly polished layout assets and full interactive prototyping.',
+    tech: ['Figma', 'UI/UX Design', 'Wireframing', 'Prototyping'],
+    category: 'uiux',
+    image: 'assets/nutrifood.png',
+    external: 'https://www.figma.com/design/CzoKLlWbaVcGsLFPIkG3EY/Figma---NutriFood-Project?node-id=0-1&t=PUYUzyaip9JR3OwR-1',
+    portrait: true,
+    },
 ];
 
 const certificatesData = [
@@ -257,7 +267,9 @@ const renderProjects = (filter = 'all') => {
     const filtered = filter === 'all' ? projectsData : projectsData.filter(p => p.category === filter);
     grid.innerHTML = filtered.map((p, i) => `
         <div class="project-card reveal" data-delay="${i * 50}" data-project="${p.id}">
-            <img src="${p.image}" alt="${p.title}" loading="lazy">
+            <div class="project-image-wrapper ${p.portrait ? 'portrait' : ''}">
+                <img src="${p.image}" alt="${p.title}" loading="lazy">
+            </div>
             <div class="project-card-body">
                 <h3>${p.title}</h3>
                 <p>${p.description}</p>
@@ -339,6 +351,15 @@ const openModal = (projectId) => {
         modalPrev.style.display = 'none';
         modalNext.style.display = 'none';
         modalDots.innerHTML = '';
+    }
+
+    const container = modalImage?.closest('.modal-image-container');
+    if (container) {
+        if (project.portrait) {
+            container.classList.add('portrait');
+        } else {
+            container.classList.remove('portrait');
+        }
     }
 
     modal.classList.add('active');
@@ -451,25 +472,7 @@ const observeRevealElements = () => {
     revealEls.forEach(el => observer.observe(el));
 };
 
-// ==========================================
-// 6. SKILL BARS ANIMATION
-// ==========================================
-const animateSkillBars = () => {
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const fills = entry.target.querySelectorAll('.bar .fill');
-                fills.forEach(fill => {
-                    const width = fill.dataset.width;
-                    if (width) fill.style.width = width + '%';
-                });
-                skillObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
 
-    document.querySelectorAll('.skill-category').forEach(cat => skillObserver.observe(cat));
-};
 
 // ==========================================
 // 7. STATS COUNTER
@@ -732,7 +735,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderProjects();
     renderCertificates();
     observeRevealElements();
-    animateSkillBars();
+
     animateStats();
     initCursor();
     initHeader();
