@@ -246,6 +246,7 @@ const projectsData = [
 ];
 
 const certificatesData = [
+    { title: 'Python Developer', org: 'Micro1', image: 'assets/certi-micro1.png', link: 'https://micro1-portal-data.s3.amazonaws.com/engineer-certificates/1778163470-3bf7f6c0-982f-42f2-9c01-255f549c74b9.jpg' },
     { title: 'Belajar Dasar Data Science', org: 'Dicoding Indonesia', image: 'assets/dasar-data-science.png', link: 'https://www.dicoding.com/certificates/4EXGQLY71ZRL' },
     { title: 'Belajar Dasar SQL', org: 'Dicoding Indonesia', image: 'assets/dasar-sql.png', link: 'https://www.dicoding.com/certificates/MRZME1K5KPYQ' },
     { title: 'Belajar Dasar Manajemen Proyek', org: 'Dicoding Indonesia', image: 'assets/dasar-manajemenproyek.png', link: 'https://www.dicoding.com/certificates/JLX17Y37GX72' },
