@@ -4,6 +4,7 @@
 // ==========================================
 
 import * as THREE from 'three';
+import { animate, inView, stagger, spring } from 'motion';
 
 // ==========================================
 // 1. THREE.JS 3D BACKGROUND
@@ -65,12 +66,18 @@ const initThreeBackground = () => {
     pointLight.position.set(5, 5, 15);
     scene.add(pointLight);
 
-    // Mouse tracking
+    // Mouse & Scroll tracking
     let mouseX = 0, mouseY = 0;
+    let targetScrollY = 0, currentScrollY = 0;
+
     window.addEventListener('mousemove', (e) => {
         mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
         mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
     });
+
+    window.addEventListener('scroll', () => {
+        targetScrollY = window.scrollY;
+    }, { passive: true });
 
     // Animation loop
     const animate = () => {
@@ -82,8 +89,12 @@ const initThreeBackground = () => {
             shape.rotation.z += shape.userData.speedZ;
         });
 
-        shapesGroup.rotation.x += (mouseY * 0.02 - shapesGroup.rotation.x) * 0.05;
-        shapesGroup.rotation.y += (mouseX * 0.02 - shapesGroup.rotation.y) * 0.05;
+        currentScrollY += (targetScrollY - currentScrollY) * 0.05;
+
+        shapesGroup.rotation.x += (mouseY * 0.03 - shapesGroup.rotation.x) * 0.05;
+        shapesGroup.rotation.y += (mouseX * 0.03 - shapesGroup.rotation.y) * 0.05;
+        shapesGroup.rotation.z = currentScrollY * 0.0006;
+        shapesGroup.position.y = currentScrollY * 0.008;
 
         renderer.render(scene, camera);
     };
@@ -266,24 +277,37 @@ const renderProjects = (filter = 'all') => {
     if (!grid) return;
 
     const filtered = filter === 'all' ? projectsData : projectsData.filter(p => p.category === filter);
-    grid.innerHTML = filtered.map((p, i) => `
-        <div class="project-card reveal" data-delay="${i * 50}" data-project="${p.id}">
-            <div class="project-image-wrapper ${p.portrait ? 'portrait' : ''}">
-                <img src="${p.image}" alt="${p.title}" loading="lazy">
-            </div>
-            <div class="project-card-body">
-                <h3>${p.title}</h3>
-                <p>${p.description}</p>
-                <div class="project-card-tech">
-                    ${p.tech.map(t => `<span>${t}</span>`).join('')}
+    const existingCards = grid.querySelectorAll('.project-card');
+
+    const updateDOM = () => {
+        grid.innerHTML = filtered.map((p, i) => `
+            <div class="project-card reveal" data-project="${p.id}">
+                <div class="project-image-wrapper ${p.portrait ? 'portrait' : ''}">
+                    <img src="${p.image}" alt="${p.title}" loading="lazy">
+                </div>
+                <div class="project-card-body">
+                    <h3>${p.title}</h3>
+                    <p>${p.description}</p>
+                    <div class="project-card-tech">
+                        ${p.tech.map(t => `<span>${t}</span>`).join('')}
+                    </div>
                 </div>
             </div>
-        </div>
-    `).join('');
+        `).join('');
 
-    // Re-attach reveal observers & click handlers
-    observeRevealElements();
-    attachProjectClickHandlers();
+        attachProjectClickHandlers();
+        animateProjectCards();
+        initCard3DTilt();
+    };
+
+    if (existingCards.length > 0 && projectsSectionViewed) {
+        animate(existingCards, 
+            { opacity: [1, 0], scale: [1, 0.92], y: [0, 15] }, 
+            { duration: 0.2, easing: [0.22, 1, 0.36, 1] }
+        ).then(updateDOM);
+    } else {
+        updateDOM();
+    }
 };
 
 const renderCertificates = () => {
@@ -291,7 +315,7 @@ const renderCertificates = () => {
     if (!grid) return;
 
     grid.innerHTML = certificatesData.map((c, i) => `
-        <div class="certificate-card reveal" data-delay="${i * 50}">
+        <div class="certificate-card reveal">
             <img src="${c.image}" alt="${c.title}" class="zoomable-cert" data-src="${c.image}" data-title="${c.title}" loading="lazy">
             <div class="certificate-card-body">
                 <h4>${c.title}</h4>
@@ -301,7 +325,8 @@ const renderCertificates = () => {
         </div>
     `).join('');
 
-    observeRevealElements();
+    animateCertificateCards();
+    initCard3DTilt();
 };
 
 // ==========================================
@@ -454,26 +479,253 @@ document.addEventListener('click', (e) => {
 });
 
 // ==========================================
-// 5. REVEAL ON SCROLL
+// 5. MOTION ANIMATIONS (Scroll-triggered)
 // ==========================================
-const observeRevealElements = () => {
-    const revealEls = document.querySelectorAll('.reveal:not(.active)');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry, index) => {
-            if (entry.isIntersecting) {
-                const delay = entry.target.dataset.delay || index * 80;
-                setTimeout(() => {
-                    entry.target.classList.add('active');
-                }, delay);
-                observer.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+let projectsSectionViewed = false;
 
-    revealEls.forEach(el => observer.observe(el));
+const initMotionAnimations = () => {
+    // ---- HERO ENTRANCE (synced with welcome overlay fade) ----
+    const heroDelay = 2.0;
+
+    const heroSequence = [
+        { sel: '.hero-greeting', props: { opacity: [0, 1], y: [20, 0] }, delay: heroDelay, dur: 0.6 },
+        { sel: '.hero-name', props: { opacity: [0, 1], y: [40, 0], filter: ['blur(8px)', 'blur(0px)'] }, delay: heroDelay + 0.15, dur: 0.8 },
+        { sel: '.hero-tagline', props: { opacity: [0, 1], y: [20, 0] }, delay: heroDelay + 0.35, dur: 0.6 },
+        { sel: '.hero-description', props: { opacity: [0, 1], y: [15, 0] }, delay: heroDelay + 0.55, dur: 0.5 },
+        { sel: '.hero-buttons', props: { opacity: [0, 1], y: [20, 0] }, delay: heroDelay + 0.7, dur: 0.5 },
+    ];
+
+    heroSequence.forEach(({ sel, props, delay, dur }) => {
+        const el = document.querySelector(sel);
+        if (el) animate(el, props, { duration: dur, delay, easing: [0.22, 1, 0.36, 1] });
+    });
+
+    // Floating cards with spring physics
+    const floatingCards = document.querySelectorAll('.floating-card');
+    if (floatingCards.length) {
+        animate(floatingCards,
+            { opacity: [0, 1], scale: [0.8, 1] },
+            { duration: 0.6, delay: stagger(0.15, { start: heroDelay + 0.5 }), easing: spring({ stiffness: 100, damping: 14 }) }
+        );
+    }
+
+    // ---- SECTION TITLES (slide from left) ----
+    document.querySelectorAll('.section-title').forEach(title => {
+        inView(title, () => {
+            animate(title,
+                { opacity: [0, 1], x: [-30, 0] },
+                { duration: 0.6, easing: [0.22, 1, 0.36, 1] }
+            );
+        }, { margin: '-10% 0px -10% 0px' });
+    });
+
+    // ---- ABOUT ----
+    const aboutText = document.querySelector('#about .about-text');
+    if (aboutText) {
+        inView(aboutText, () => {
+            animate(aboutText,
+                { opacity: [0, 1], x: [-25, 0] },
+                { duration: 0.7, easing: [0.22, 1, 0.36, 1] }
+            );
+        }, { margin: '-5% 0px' });
+    }
+
+    const aboutStats = document.querySelector('.about-stats');
+    if (aboutStats) {
+        inView(aboutStats, () => {
+            animate(aboutStats.querySelectorAll('.stat-item'),
+                { opacity: [0, 1], y: [25, 0], scale: [0.92, 1] },
+                { duration: 0.4, delay: stagger(0.07), easing: spring({ stiffness: 120, damping: 14 }) }
+            );
+        }, { margin: '-5% 0px' });
+    }
+
+    const aboutImage = document.querySelector('.about-image');
+    if (aboutImage) {
+        inView(aboutImage, () => {
+            animate(aboutImage,
+                { opacity: [0, 1], scale: [0.85, 1], rotate: [-3, 0] },
+                { duration: 0.7, easing: spring({ stiffness: 80, damping: 12 }) }
+            );
+        });
+    }
+
+    // ---- EDUCATION ----
+    const eduCard = document.querySelector('.education-card');
+    if (eduCard) {
+        inView(eduCard, () => {
+            animate(eduCard,
+                { opacity: [0, 1], y: [30, 0] },
+                { duration: 0.6, easing: [0.22, 1, 0.36, 1] }
+            );
+            const gpaFill = eduCard.querySelector('.gpa-fill');
+            if (gpaFill) {
+                animate(gpaFill,
+                    { strokeDashoffset: [326.7, 36.75] },
+                    { duration: 1.2, delay: 0.3, easing: [0.22, 1, 0.36, 1] }
+                );
+            }
+            const tags = eduCard.querySelectorAll('.course-tags span');
+            if (tags.length) {
+                animate(tags,
+                    { opacity: [0, 1], scale: [0.8, 1] },
+                    { duration: 0.3, delay: stagger(0.04, { start: 0.4 }) }
+                );
+            }
+        }, { margin: '-10% 0px' });
+    }
+
+    // ---- EXPERIENCE (Timeline cascade from left) ----
+    document.querySelectorAll('.timeline-item').forEach(item => {
+        inView(item, () => {
+            animate(item,
+                { opacity: [0, 1], x: [-35, 0] },
+                { duration: 0.6, easing: spring({ stiffness: 100, damping: 15 }) }
+            );
+            const dot = item.querySelector('.timeline-dot');
+            if (dot) {
+                animate(dot,
+                    { scale: [0, 1.3, 1], opacity: [0, 1] },
+                    { duration: 0.5, delay: 0.15 }
+                );
+            }
+        }, { margin: '-10% 0px' });
+    });
+
+    // ---- FILTER BAR ----
+    const filterBar = document.querySelector('.filter-bar');
+    if (filterBar) {
+        inView(filterBar, () => {
+            animate(filterBar,
+                { opacity: [0, 1], y: [15, 0] },
+                { duration: 0.4, easing: [0.22, 1, 0.36, 1] }
+            );
+        });
+    }
+
+    // ---- SKILLS (stagger categories + sub-items) ----
+    document.querySelectorAll('.skill-category').forEach((cat, i) => {
+        inView(cat, () => {
+            animate(cat,
+                { opacity: [0, 1], y: [25, 0] },
+                { duration: 0.5, delay: i * 0.08, easing: [0.22, 1, 0.36, 1] }
+            );
+            const items = cat.querySelectorAll('.skill-bar-item, .tool-item');
+            if (items.length) {
+                animate(items,
+                    { opacity: [0, 1], x: [-15, 0] },
+                    { duration: 0.3, delay: stagger(0.04, { start: 0.2 }) }
+                );
+            }
+        }, { margin: '-10% 0px' });
+    });
+
+    // ---- LEARNING (slide from right with subtle rotation) ----
+    document.querySelectorAll('.learning-card').forEach((card, i) => {
+        inView(card, () => {
+            animate(card,
+                { opacity: [0, 1], x: [35, 0], rotate: [2, 0] },
+                { duration: 0.5, delay: i * 0.1, easing: spring({ stiffness: 100, damping: 14 }) }
+            );
+        }, { margin: '-10% 0px' });
+    });
+
+    // ---- CONTACT (sequential reveal) ----
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+        inView(contactSection, () => {
+            const sub = contactSection.querySelector('.contact-sub');
+            const heading = contactSection.querySelector('.contact-heading');
+            const text = contactSection.querySelector('.contact-text');
+            const form = contactSection.querySelector('.contact-form');
+
+            if (sub) animate(sub, { opacity: [0, 1], y: [15, 0] }, { duration: 0.5, easing: [0.22, 1, 0.36, 1] });
+            if (heading) animate(heading, { opacity: [0, 1], y: [20, 0] }, { duration: 0.6, delay: 0.1, easing: [0.22, 1, 0.36, 1] });
+            if (text) animate(text, { opacity: [0, 1], y: [15, 0] }, { duration: 0.5, delay: 0.2 });
+            if (form) animate(form, { opacity: [0, 1], y: [25, 0] }, { duration: 0.6, delay: 0.35, easing: [0.22, 1, 0.36, 1] });
+        }, { margin: '-10% 0px' });
+    }
 };
 
+// ---- PROJECT CARDS ANIMATION ----
+const animateProjectCards = () => {
+    const grid = document.getElementById('project-grid');
+    if (!grid) return;
 
+    if (!projectsSectionViewed) {
+        inView(grid, () => {
+            projectsSectionViewed = true;
+            const cards = grid.querySelectorAll('.project-card');
+            if (cards.length) {
+                animate(cards,
+                    { opacity: [0, 1], scale: [0.88, 1], y: [35, 0] },
+                    { duration: 0.45, delay: stagger(0.04), easing: spring({ stiffness: 120, damping: 14 }) }
+                );
+            }
+        }, { margin: '-5% 0px' });
+    } else {
+        const cards = grid.querySelectorAll('.project-card');
+        if (cards.length) {
+            animate(cards,
+                { opacity: [0, 1], scale: [0.88, 1], y: [35, 0] },
+                { duration: 0.4, delay: stagger(0.035), easing: spring({ stiffness: 140, damping: 15 }) }
+            );
+        }
+    }
+};
+
+// ---- CERTIFICATE CARDS ANIMATION ----
+const animateCertificateCards = () => {
+    const grid = document.getElementById('certificate-grid');
+    if (!grid) return;
+
+    inView(grid, () => {
+        const cards = grid.querySelectorAll('.certificate-card');
+        if (cards.length) {
+            animate(cards,
+                { opacity: [0, 1], scale: [0.88, 1], y: [25, 0] },
+                { duration: 0.45, delay: stagger(0.04), easing: spring({ stiffness: 120, damping: 15 }) }
+            );
+        }
+    }, { margin: '-5% 0px' });
+};
+
+// ==========================================
+// 6. 3D CARD TILT & SPOTLIGHT GLARE
+// ==========================================
+const initCard3DTilt = () => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    const cards = document.querySelectorAll('.project-card, .education-card, .learning-card, .certificate-card, .skill-category, .timeline-card');
+    cards.forEach(card => {
+        if (card.dataset.tiltInit === 'true') return;
+        card.dataset.tiltInit = 'true';
+
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Set spotlight coords for CSS radial gradient
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+
+            // 3D rotation angles
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotX = ((y - centerY) / centerY) * -6;
+            const rotY = ((x - centerX) / centerX) * 6;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+            card.style.transition = 'transform 0.08s ease-out';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            card.style.transition = 'transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)';
+        });
+    });
+};
 
 // ==========================================
 // 7. STATS COUNTER
@@ -484,7 +736,9 @@ const animateStats = () => {
             if (entry.isIntersecting) {
                 const numbers = entry.target.querySelectorAll('.stat-number[data-target]');
                 numbers.forEach(num => {
-                    const target = parseInt(num.dataset.target);
+                    const target = parseFloat(num.dataset.target);
+                    const suffix = num.dataset.suffix || '';
+                    const isFloat = num.dataset.target.includes('.');
                     const duration = 2000;
                     const start = performance.now();
 
@@ -492,9 +746,13 @@ const animateStats = () => {
                         const elapsed = now - start;
                         const progress = Math.min(elapsed / duration, 1);
                         const eased = 1 - Math.pow(1 - progress, 3);
-                        num.textContent = Math.floor(eased * target).toLocaleString();
+                        if (isFloat) {
+                            num.textContent = (eased * target).toFixed(2) + suffix;
+                        } else {
+                            num.textContent = Math.floor(eased * target).toLocaleString() + suffix;
+                        }
                         if (progress < 1) requestAnimationFrame(update);
-                        else num.textContent = target.toLocaleString();
+                        else num.textContent = (isFloat ? target.toFixed(2) : target.toLocaleString()) + suffix;
                     };
                     requestAnimationFrame(update);
                 });
@@ -507,7 +765,7 @@ const animateStats = () => {
 };
 
 // ==========================================
-// 8. CUSTOM CURSOR
+// 8. CUSTOM CURSOR & MAGNETIC EFFECT
 // ==========================================
 const initCursor = () => {
     const cursor = document.getElementById('cursor');
@@ -515,7 +773,6 @@ const initCursor = () => {
     if (!cursor || !follower) return;
 
     let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
     let followerX = 0, followerY = 0;
 
     window.addEventListener('mousemove', (e) => {
@@ -525,17 +782,17 @@ const initCursor = () => {
         cursor.style.top = mouseY + 'px';
     });
 
-    const animate = () => {
-        followerX += (mouseX - followerX) * 0.12;
-        followerY += (mouseY - followerY) * 0.12;
+    const animateCursor = () => {
+        followerX += (mouseX - followerX) * 0.15;
+        followerY += (mouseY - followerY) * 0.15;
         follower.style.left = followerX + 'px';
         follower.style.top = followerY + 'px';
-        requestAnimationFrame(animate);
+        requestAnimationFrame(animateCursor);
     };
-    animate();
+    animateCursor();
 
     // Hover effect on interactive elements
-    const interactiveEls = document.querySelectorAll('a, button, .project-card, .certificate-card, input, textarea, .filter-btn');
+    const interactiveEls = document.querySelectorAll('a, button, .project-card, .certificate-card, input, textarea, .filter-btn, .tool-item');
     interactiveEls.forEach(el => {
         el.addEventListener('mouseenter', () => follower.classList.add('hover'));
         el.addEventListener('mouseleave', () => follower.classList.remove('hover'));
@@ -549,6 +806,26 @@ const initCursor = () => {
     }
 };
 
+const initMagneticButtons = () => {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
+    const magneticElements = document.querySelectorAll('.btn-primary, .btn-secondary, .icon-btn, .btn-outline-sm, .filter-btn');
+    magneticElements.forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = `translate(${x * 0.22}px, ${y * 0.22}px)`;
+            btn.style.transition = 'transform 0.08s ease-out';
+        });
+
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = '';
+            btn.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        });
+    });
+};
+
 // ==========================================
 // 9. HEADER SCROLL & MOBILE MENU
 // ==========================================
@@ -557,16 +834,15 @@ const initHeader = () => {
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
 
-    // Scroll
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        if (window.scrollY > 40) {
             header?.classList.add('scrolled');
         } else {
             header?.classList.remove('scrolled');
         }
     });
 
-    // Progress bar
+    // Scroll Progress
     const progressBar = document.getElementById('scroll-progress');
     window.addEventListener('scroll', () => {
         const scrollTop = window.scrollY;
@@ -582,7 +858,6 @@ const initHeader = () => {
         document.body.style.overflow = mobileMenu?.classList.contains('active') ? 'hidden' : '';
     });
 
-    // Close mobile menu on link click
     mobileMenu?.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             mobileMenu.classList.remove('active');
@@ -593,30 +868,90 @@ const initHeader = () => {
 };
 
 // ==========================================
-// 10. ACTIVE NAV LINK
+// 10. SLIDING NAV INDICATOR & ACTIVE NAV
 // ==========================================
+const updateNavIndicator = (activeLink) => {
+    const indicator = document.getElementById('nav-indicator');
+    const nav = document.getElementById('desktop-nav');
+    if (!indicator || !nav || !activeLink) return;
+
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+
+    const left = linkRect.left - navRect.left;
+    const width = linkRect.width;
+
+    indicator.style.transform = `translateX(${left}px)`;
+    indicator.style.width = `${width}px`;
+    indicator.style.opacity = '1';
+};
+
 const initActiveNav = () => {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.desktop-nav .nav-link');
+    const nav = document.getElementById('desktop-nav');
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 navLinks.forEach(link => {
-                    link.classList.remove('active');
                     if (link.getAttribute('href') === `#${entry.target.id}`) {
+                        navLinks.forEach(l => l.classList.remove('active'));
                         link.classList.add('active');
+                        updateNavIndicator(link);
                     }
                 });
             }
         });
-    }, { rootMargin: '-40% 0px -40% 0px' });
+    }, { rootMargin: '-35% 0px -35% 0px' });
 
     sections.forEach(section => observer.observe(section));
+
+    // Nav hover previews
+    navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => updateNavIndicator(link));
+    });
+
+    nav?.addEventListener('mouseleave', () => {
+        const currentActive = nav.querySelector('.nav-link.active');
+        if (currentActive) updateNavIndicator(currentActive);
+    });
+
+    // Initial position
+    setTimeout(() => {
+        const initialActive = nav?.querySelector('.nav-link.active') || navLinks[0];
+        if (initialActive) updateNavIndicator(initialActive);
+    }, 300);
+
+    window.addEventListener('resize', () => {
+        const currentActive = nav?.querySelector('.nav-link.active');
+        if (currentActive) updateNavIndicator(currentActive);
+    });
 };
 
 // ==========================================
-// 11. FILTER BUTTONS
+// 11. TIMELINE SCROLL PROGRESS BEAM
+// ==========================================
+const initTimelineProgress = () => {
+    const container = document.getElementById('timeline-container');
+    const progress = document.getElementById('timeline-progress');
+    if (!container || !progress) return;
+
+    const updateProgress = () => {
+        const rect = container.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        const totalHeight = rect.height;
+        const scrolled = (windowHeight * 0.7) - rect.top;
+        const percent = Math.min(Math.max((scrolled / totalHeight) * 100, 0), 100);
+        progress.style.height = `${percent}%`;
+    };
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+};
+
+// ==========================================
+// 12. FILTER BUTTONS
 // ==========================================
 const initFilters = () => {
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -629,7 +964,7 @@ const initFilters = () => {
 };
 
 // ==========================================
-// 12. THEME TOGGLE
+// 13. THEME TOGGLE
 // ==========================================
 const initTheme = () => {
     const toggle = document.getElementById('theme-toggle');
@@ -656,12 +991,12 @@ const initTheme = () => {
 };
 
 // ==========================================
-// 13. BACK TO TOP
+// 14. BACK TO TOP
 // ==========================================
 const initBackToTop = () => {
     const btn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 600) {
+        if (window.scrollY > 500) {
             btn?.classList.add('visible');
         } else {
             btn?.classList.remove('visible');
@@ -673,7 +1008,7 @@ const initBackToTop = () => {
 };
 
 // ==========================================
-// 14. WELCOME OVERLAY
+// 15. WELCOME OVERLAY
 // ==========================================
 const initWelcome = () => {
     const overlay = document.getElementById('welcome-overlay');
@@ -681,11 +1016,11 @@ const initWelcome = () => {
 
     setTimeout(() => {
         overlay.classList.add('hidden');
-    }, 2500);
+    }, 2200);
 };
 
 // ==========================================
-// 15. VISITOR COUNTER
+// 16. VISITOR COUNTER
 // ==========================================
 const initVisitorCounter = () => {
     const el = document.getElementById('visitor-counter');
@@ -701,56 +1036,34 @@ const initVisitorCounter = () => {
 };
 
 // ==========================================
-// 16. 3D TILT ON CARDS (Desktop)
-// ==========================================
-const initTiltEffect = () => {
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-
-    const cards = document.querySelectorAll('.project-card, .learning-card, .certificate-card, .skill-category');
-    cards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = ((y - centerY) / centerY) * -8;
-            const rotateY = ((x - centerX) / centerX) * 8;
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-            card.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-        });
-        card.addEventListener('mouseenter', () => {
-            card.style.transition = 'transform 0.1s ease';
-        });
-    });
-};
-
-// ==========================================
 // 17. INIT
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
     initThreeBackground();
     renderProjects();
     renderCertificates();
-    observeRevealElements();
+
+    // Motion scroll animations
+    initMotionAnimations();
 
     animateStats();
     initCursor();
     initHeader();
     initActiveNav();
+    initTimelineProgress();
     initFilters();
     initTheme();
     initBackToTop();
     initWelcome();
     initVisitorCounter();
 
-    // Re-run tilt after project render
-    setTimeout(initTiltEffect, 500);
+    // 3D Card Tilt & Magnetic Effects
+    setTimeout(() => {
+        initCard3DTilt();
+        initMagneticButtons();
+    }, 400);
 
-    // Smooth scroll for anchor links
+    // Smooth scroll for anchor links with offset
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             const targetId = this.getAttribute('href');
@@ -767,5 +1080,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    console.log('✨ Portfolio 3D initialized successfully!');
+    console.log('✨ Portfolio 3D interactive experience loaded!');
 });

@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Nathaniel Steave Harjanto">
     <meta name="description"
-        content="Portofolio Nathaniel Steave Harjanto — mahasiswa Informatika UNS yang fokus pada Data Science dan Web Development.">
-    <meta property="og:title" content="Nathaniel Steave Harjanto | IT Enthusiast">
-    <meta property="og:description" content="Jelajahi proyek web development dan data science karya Nathaniel Steave.">
+        content="Portofolio Nathaniel Steave Harjanto — Fresh Informatics Graduate dari Universitas Sebelas Maret (Dengan Pujian / IPK 3.55). Berpengalaman dalam Full-Stack Web Development, Data Science, dan AI/LLM Integration.">
+    <meta property="og:title" content="Nathaniel Steave Harjanto | Fresh Informatics Graduate • Full-Stack & AI/Data Developer">
+    <meta property="og:description" content="Jelajahi portofolio proyek web development, data science, dan AI/ML karya Nathaniel Steave Harjanto.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nathanielsteave.vercel.app">
-    <title>Nathaniel Steave Harjanto | IT Enthusiast</title>
+    <title>Nathaniel Steave Harjanto | Fresh Informatics Graduate</title>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,8 @@
         {
             "imports": {
                 "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "motion": "https://esm.sh/motion@10"
             }
         }
     </script>
@@ -47,7 +48,7 @@
     <div class="welcome-overlay" id="welcome-overlay">
         <div class="welcome-content">
             <h1 class="welcome-title">Nathaniel Steave Harjanto</h1>
-            <p class="welcome-subtitle" id="welcome-scramble">Connecting ideas through code...</p>
+            <p class="welcome-subtitle" id="welcome-scramble">Fresh Informatics Graduate • Full-Stack & AI Developer</p>
         </div>
     </div>
 
@@ -55,7 +56,8 @@
     <header class="main-header" id="main-header">
         <div class="header-inner">
             <a href="#home" class="logo">NSH<span class="logo-dot">.</span></a>
-            <nav class="desktop-nav">
+            <nav class="desktop-nav" id="desktop-nav">
+                <div class="nav-indicator" id="nav-indicator"></div>
                 <a href="#home" class="nav-link active">Home</a>
                 <a href="#about" class="nav-link">About</a>
                 <a href="#education" class="nav-link">Education</a>
@@ -101,17 +103,16 @@
                 <p class="hero-greeting reveal">Hello, I'm</p>
                 <h1 class="hero-name reveal" data-delay="100">Nathaniel Steave<br>Harjanto<span
                         class="hero-dot">.</span></h1>
-                <h2 class="hero-tagline reveal" data-delay="200">Exploring data-driven and<br>web-based solutions.</h2>
+                <h2 class="hero-tagline reveal" data-delay="200">Fresh Informatics Graduate &amp;<br>Full-Stack / AI-Data Developer.</h2>
                 <p class="hero-description reveal" data-delay="300">
-                    Informatics student with a strong foundation in web development and database management.
-                    Currently expanding expertise in web development, data, and AI-driven to solve real-world challenges.
+                    Graduated with Honors (GPA: 3.55 / 4.00) from Sebelas Maret University. Skilled in building production-ready web applications with Laravel, FastAPI, and MySQL, alongside hands-on expertise in machine learning, LLM integration, and interactive data analytics.
                 </p>
                 <div class="hero-buttons reveal" data-delay="400">
                     <a href="#projects" class="btn-primary">
                         <span>My Projects</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </a>
-                    <a href="assets/CV.pdf" download class="btn-secondary">
+                    <a href="assets/Nathaniel_Steave_Harjanto_Resume.pdf" download class="btn-secondary">
                         <span>Download CV</span>
                         <i class="fa-solid fa-download"></i>
                     </a>
@@ -128,7 +129,7 @@
                 </div>
                 <div class="floating-card card-3">
                     <i class="fa-solid fa-brain"></i>
-                    <span>AI/ML</span>
+                    <span>AI &amp; ML</span>
                 </div>
             </div>
         </section>
@@ -140,30 +141,26 @@
                 <div class="about-grid">
                     <div class="about-text reveal">
                         <p>
-                            I'm an IT enthusiast passionate about building meaningful digital experiences through web
-                            development, data, and AI-driven solutions. With a strong foundation in Python, Java, C++,
-                            and PHP, along with hands-on experience using MySQL and Laravel, I enjoy turning complex
-                            ideas into functional, user-focused applications.
+                            I'm a fresh Informatics graduate from <strong>Sebelas Maret University (UNS)</strong> with Honors (GPA: 3.55 / 4.00). I bridge the gap between robust software engineering and intelligent data-driven solutions, turning complex business requirements into high-performance digital products.
                         </p>
                         <p>
-                            My current focus is on AI applications and web development, and also machine learning and data analytics. I'm driven by curiosity and a desire to
-                            keep learning, constantly experimenting with new technologies.
+                            My background combines full-stack web development (Laravel, FastAPI, PHP, JavaScript, MySQL, REST APIs) with end-to-end data science and AI applications (Python, Random Forest, LLM Integration, Looker Studio, Streamlit). Having completed internships in AI and IT along with Kampus Merdeka independent study, I am excited to bring technical rigor and creative problem-solving to high-impact engineering teams.
                         </p>
                         <div class="about-stats">
                             <div class="stat-item reveal">
-                                <span class="stat-number" data-target="12">0</span>
-                                <span class="stat-label">Projects</span>
+                                <span class="stat-number" data-target="13" data-suffix="+">0</span>
+                                <span class="stat-label">Projects Built</span>
                             </div>
                             <div class="stat-item reveal">
-                                <span class="stat-number" data-target="9">0</span>
-                                <span class="stat-label">Certificates</span>
+                                <span class="stat-number" data-target="10">0</span>
+                                <span class="stat-label">Certifications</span>
                             </div>
                             <div class="stat-item reveal">
-                                <span class="stat-number">3.53</span>
-                                <span class="stat-label">GPA</span>
+                                <span class="stat-number" data-target="3.55">0</span>
+                                <span class="stat-label">IPK / GPA (Honors)</span>
                             </div>
                             <div class="stat-item reveal">
-                                <span class="stat-number" data-target="5000+">0</span>
+                                <span class="stat-number" data-target="5000" data-suffix="+">0</span>
                                 <span class="stat-label">Lines of Code</span>
                             </div>
                         </div>
@@ -188,9 +185,9 @@
                             <img src="assets/logo_uns.png" alt="UNS Logo">
                         </div>
                         <div class="edu-info">
-                            <span class="edu-badge">Undergraduate</span>
+                            <span class="edu-badge"><i class="fa-solid fa-award"></i> Graduated With Honors (Dengan Pujian)</span>
                             <h3>Sebelas Maret University (UNS)</h3>
-                            <p class="edu-major">Bachelor of Informatics • 2022 - Present</p>
+                            <p class="edu-major">Bachelor of Informatics (S1 Informatika) • 2022 – 2026 (4 Years 0 Months)</p>
                         </div>
                     </div>
                     <div class="edu-body">
@@ -199,23 +196,29 @@
                                 <svg viewBox="0 0 120 120">
                                     <circle cx="60" cy="60" r="52" class="gpa-bg"></circle>
                                     <circle cx="60" cy="60" r="52" class="gpa-fill" stroke-dasharray="326.7"
-                                        stroke-dashoffset="39.2"></circle>
+                                        stroke-dashoffset="326.7"></circle>
                                 </svg>
                                 <div class="gpa-text">
-                                    <span class="gpa-value">3.52</span>
+                                    <span class="gpa-value">3.55</span>
                                     <span class="gpa-max">/ 4.00</span>
                                 </div>
+                            </div>
+                            <div class="gpa-meta">
+                                <span class="gpa-label">IPK</span>
+                                <span class="gpa-badge"><i class="fa-solid fa-medal"></i> Dengan Pujian (Honors)</span>
+                                <span class="gpa-sks"><i class="fa-solid fa-graduation-cap"></i> 145 SKS Selesai</span>
                             </div>
                         </div>
                         <div class="edu-courses">
                             <span class="courses-label">Relevant Coursework</span>
                             <div class="course-tags">
-                                <span>Programming</span>
+                                <span>Artificial Intelligence</span>
                                 <span>Machine Learning</span>
                                 <span>Data Mining</span>
-                                <span>Web Dev</span>
-                                <span>AI</span>
-                                <span>Data Structures</span>
+                                <span>Data Structures &amp; Algorithms</span>
+                                <span>Web Programming</span>
+                                <span>Databases</span>
+                                <span>Software Engineering</span>
                             </div>
                         </div>
                     </div>
@@ -227,18 +230,31 @@
         <section id="experience" class="section">
             <div class="section-container">
                 <h2 class="section-title reveal"><span class="section-num">03.</span> Experience</h2>
-                <div class="timeline">
+                <div class="timeline" id="timeline-container">
                     <div class="timeline-line"></div>
+                    <div class="timeline-progress" id="timeline-progress"></div>
+                    <div class="timeline-item reveal">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <span class="timeline-date">Jul 2026 – Present</span>
+                            <h3>AI Intern</h3>
+                            <span class="timeline-org">FlyRank AI</span>
+                            <ul>
+                                <li>Focusing on Machine Learning and AI solutions to optimize intelligent workflows.</li>
+                                <li>Collaborating on model implementations and testing AI-driven features.</li>
+                            </ul>
+                        </div>
+                    </div>
                     <div class="timeline-item reveal">
                         <div class="timeline-dot"></div>
                         <div class="timeline-card">
                             <span class="timeline-date">Feb 2025 – Apr 2025</span>
                             <h3>IT Intern</h3>
-                            <span class="timeline-org">SMKN 4 Klaten</span>
+                            <span class="timeline-org">SMK Negeri 4 Klaten</span>
                             <ul>
-                                <li>Built web-based attendance system with geolocation using Laravel & MySQL.</li>
-                                <li>Digitized manual record-keeping processes, improving data integrity.</li>
-                                <li>Full development cycle: requirement gathering to deployment.</li>
+                                <li>Built full-stack web-based attendance system with geolocation and geofencing (100m radius) using Laravel, Blade, MySQL, &amp; REST API.</li>
+                                <li>Directed entire SDLC from Figma UI/UX prototyping to backend architecture, debugging, code review, testing, and deployment.</li>
+                                <li>Digitized manual attendance operations, improving institutional data integrity and administrative efficiency.</li>
                             </ul>
                         </div>
                     </div>
@@ -246,12 +262,13 @@
                         <div class="timeline-dot"></div>
                         <div class="timeline-card">
                             <span class="timeline-date">Sep 2024 – Dec 2024</span>
-                            <h3>Independent Study – Data Science</h3>
-                            <span class="timeline-org">Kampus Merdeka, Startup Campus</span>
+                            <h3>Data Science Independent Study</h3>
+                            <span class="timeline-org">Kampus Merdeka — Startup Campus</span>
                             <ul>
-                                <li>Developed ML model with Random Forest Regression to predict CO₂ emissions.</li>
-                                <li>Created interactive visualizations for green economic transformation insights.</li>
-                                <li>Delivered predictive analytics project for Selection to Showcase event.</li>
+                                <li>Engineered Random Forest Regression models to predict CO₂ emissions in Spain to support sustainability initiatives.</li>
+                                <li>Conducted end-to-end preprocessing, feature engineering, and model evaluation.</li>
+                                <li>Built interactive Looker Studio dashboards translating complex environmental metrics into actionable stakeholder insights.</li>
+                                <li>Recognized as Presenter at the "Selection to Showcase" event for outstanding technical execution.</li>
                             </ul>
                         </div>
                     </div>
@@ -259,12 +276,11 @@
                         <div class="timeline-dot"></div>
                         <div class="timeline-card">
                             <span class="timeline-date">Jan 2023 – Dec 2023</span>
-                            <h3>Entrepreneurship Staff</h3>
-                            <span class="timeline-org">HIMASTER</span>
+                            <h3>Staff of Institutional Independence</h3>
+                            <span class="timeline-org">HIMASTER UNS (Himpunan Mahasiswa Informatika)</span>
                             <ul>
-                                <li>Designed marketing visuals and social media campaigns.</li>
-                                <li>Managed sales operations and transaction tracking.</li>
-                                <li>Contributed to branding with engaging promotional materials.</li>
+                                <li>Designed and published bi-monthly business development infographics and promotional media across social channels.</li>
+                                <li>Managed organizational sales operations, ensuring 100% accuracy in transaction verification, proof collection, and revenue tracking.</li>
                             </ul>
                         </div>
                     </div>
@@ -273,10 +289,10 @@
                         <div class="timeline-card">
                             <span class="timeline-date">Mar 2023 – Sep 2023</span>
                             <h3>Fundraising Staff</h3>
-                            <span class="timeline-org">P!NGFEST</span>
+                            <span class="timeline-org">Pekan Informasi dan Teknologi (P!NGFEST)</span>
                             <ul>
-                                <li>Organized fundraising campaigns achieving ~Rp 10 million in 6 months.</li>
-                                <li>Produced monthly reports and optimized fund management.</li>
+                                <li>Organized fundraising campaigns for P!NGFEST, achieving a revenue target of ~IDR 10 million over 6 months.</li>
+                                <li>Reported monthly fundraising income and optimized resource management.</li>
                             </ul>
                         </div>
                     </div>
@@ -292,7 +308,7 @@
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="web">Web Dev</button>
                     <button class="filter-btn" data-filter="data">Data Science</button>
-                    <button class="filter-btn" data-filter="ai">AI</button>
+                    <button class="filter-btn" data-filter="ai">AI / ML</button>
                     <button class="filter-btn" data-filter="cv">Computer Vision</button>
                     <button class="filter-btn" data-filter="uiux">UI/UX Design</button>
                     <button class="filter-btn" data-filter="basic">Basic Web</button>
@@ -306,12 +322,12 @@
         <!-- ===== SKILLS ===== -->
         <section id="skills" class="section">
             <div class="section-container">
-                <h2 class="section-title reveal"><span class="section-num">05.</span> Skills & Technology</h2>
+                <h2 class="section-title reveal"><span class="section-num">05.</span> Skills &amp; Technology</h2>
                 <div class="skills-grid">
                     <div class="skill-category reveal">
                         <div class="skill-cat-header">
                             <i class="fas fa-laptop-code"></i>
-                            <h3>Programming</h3>
+                            <h3>Programming Languages</h3>
                         </div>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
@@ -323,66 +339,88 @@
                                 <span class="skill-level advanced">Advanced</span>
                             </div>
                             <div class="skill-bar-item">
-                                <span>Java</span>
-                                <span class="skill-level intermediate">Intermediate</span>
-                            </div>
-                            <div class="skill-bar-item">
                                 <span>PHP</span>
                                 <span class="skill-level intermediate">Intermediate</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="skill-category reveal">
-                        <div class="skill-cat-header">
-                            <i class="fas fa-globe"></i>
-                            <h3>Web Development</h3>
-                        </div>
-                        <div class="skill-bars">
                             <div class="skill-bar-item">
-                                <span>HTML5 / CSS3</span>
-                                <span class="skill-level expert">Expert</span>
-                            </div>
-                            <div class="skill-bar-item">
-                                <span>Laravel</span>
+                                <span>Java &amp; C++</span>
                                 <span class="skill-level intermediate">Intermediate</span>
                             </div>
                             <div class="skill-bar-item">
-                                <span>MySQL</span>
+                                <span>SQL</span>
                                 <span class="skill-level advanced">Advanced</span>
                             </div>
                         </div>
                     </div>
                     <div class="skill-category reveal">
                         <div class="skill-cat-header">
-                            <i class="fas fa-brain"></i>
-                            <h3>Data Science & AI</h3>
+                            <i class="fas fa-globe"></i>
+                            <h3>Software &amp; Web Development</h3>
                         </div>
                         <div class="skill-bars">
                             <div class="skill-bar-item">
-                                <span>Machine Learning</span>
+                                <span>Laravel (PHP)</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>FastAPI</span>
                                 <span class="skill-level intermediate">Intermediate</span>
                             </div>
                             <div class="skill-bar-item">
-                                <span>Data Analysis</span>
-                                <span class="skill-level intermediate">Intermediate</span>
+                                <span>MySQL &amp; Relational DB</span>
+                                <span class="skill-level advanced">Advanced</span>
                             </div>
                             <div class="skill-bar-item">
-                                <span>Computer Vision</span>
-                                <span class="skill-level beginner">Beginner</span>
+                                <span>RESTful APIs</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>HTML5 / CSS3 / Tailwind</span>
+                                <span class="skill-level expert">Expert</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-category reveal">
+                        <div class="skill-cat-header">
+                            <i class="fas fa-brain"></i>
+                            <h3>AI &amp; Data Science</h3>
+                        </div>
+                        <div class="skill-bars">
+                            <div class="skill-bar-item">
+                                <span>Machine Learning &amp; Regression</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>LLM Integration &amp; Prompting</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>Data Preprocessing &amp; Feature Eng.</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>Streamlit &amp; Plotly</span>
+                                <span class="skill-level advanced">Advanced</span>
+                            </div>
+                            <div class="skill-bar-item">
+                                <span>Computer Vision (MediaPipe)</span>
+                                <span class="skill-level intermediate">Intermediate</span>
                             </div>
                         </div>
                     </div>
                     <div class="skill-category reveal">
                         <div class="skill-cat-header">
                             <i class="fas fa-tools"></i>
-                            <h3>Tools & Software</h3>
+                            <h3>Tools &amp; Workflow</h3>
                         </div>
                         <div class="tool-grid">
                             <div class="tool-item"><i class="fab fa-git-alt"></i><span>Git</span></div>
                             <div class="tool-item"><i class="fab fa-github"></i><span>GitHub</span></div>
-                            <div class="tool-item"><i class="fab fa-figma"></i><span>Figma</span></div>
-                            <div class="tool-item"><i class="fas fa-file-excel"></i><span>Excel</span></div>
+                            <div class="tool-item"><i class="fas fa-terminal"></i><span>VS Code</span></div>
+                            <div class="tool-item"><i class="fas fa-cloud"></i><span>Vercel</span></div>
                             <div class="tool-item"><i class="fas fa-chart-bar"></i><span>Looker Studio</span></div>
+                            <div class="tool-item"><i class="fab fa-figma"></i><span>Figma</span></div>
+                            <div class="tool-item"><i class="fas fa-file-excel"></i><span>Excel / Sheets</span></div>
                         </div>
                     </div>
                 </div>
